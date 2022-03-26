@@ -18,6 +18,9 @@ dependencies:
   get_it: ^7.2.0
   auto_route: ^3.2.4
   retrofit: ^3.0.1+1
+  google_maps_flutter: ^2.1.3
+  expandable_bottom_sheet: ^1.1.1+1
+  flutter_native_splash: ^2.0.4
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +34,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/maps/style.json
+    - assets/logo/Kosoku.png
   fonts:
     - family: SFPro
       fonts:

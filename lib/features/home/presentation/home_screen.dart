@@ -1,5 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:kosoku/features/home/utils/maps_theme_loader.dart';
 
 import '../../../core/utils/navigation/route_destination.dart';
 import '../../navigation/presentation/app_router.dart';
@@ -32,19 +35,45 @@ final destinations = [
   )
 ];
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return HomeState();
+  }
+
+}
+
+class HomeState extends State<HomeScreen> {
+  final scaffoldState = GlobalKey<ScaffoldState>();
+
+  _onMapCreated(GoogleMapController controller) {
+    getMapsStyle().then((value) => controller.setMapStyle(value));
+
+    /*scaffoldState.currentState?.showBottomSheet((context) => Container(
+      height: 300,
+    ));*/
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Center(
-            child: Text("Home"),
+      body: ExpandableBottomSheet(
+        background: GoogleMap(
+          initialCameraPosition: const CameraPosition(target: LatLng(0, 0)),
+          mapType: MapType.normal,
+          onMapCreated: _onMapCreated,
+        ),
+        persistentContentHeight: 300,
+        expandableContent: Container(
+          height: MediaQuery.of(context).size.height - MediaQuery.of(context).viewPadding.top,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+            color: Colors.white,
+            boxShadow: [],
           ),
-        ],
+        ),
       ),
       drawer: Drawer(
         child: ListView.builder(

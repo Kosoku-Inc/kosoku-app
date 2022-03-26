@@ -6,10 +6,11 @@ import 'package:kosoku/features/navigation/presentation/app_router.dart';
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 5)).then((_) {
-      AutoRouter.of(context).replace(const OnboardingRoute());
+    Future.delayed(const Duration(seconds: 2)).then((value) {
+      AutoRouter.of(context).push(const OnboardingRoute());
     });
 
     return Scaffold(
@@ -17,7 +18,7 @@ class SplashScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Center(
-              child: AppLogo(fontSize: 42),
+              child: AppLogo(height: 44),
             ),
           ],
         )

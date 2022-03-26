@@ -18,7 +18,6 @@ dependencies:
   get_it: ^7.2.0
   auto_route: ^3.2.4
   retrofit: ^3.0.1+1
-  page_transition: ^2.0.5
 
 dev_dependencies:
   flutter_test:

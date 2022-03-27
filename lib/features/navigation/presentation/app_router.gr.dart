@@ -22,9 +22,11 @@ class _$AppRouter extends RootStackRouter {
           routeData: routeData, child: const SplashScreen());
     },
     OnboardingRoute.name: (routeData) {
+      final args = routeData.argsAs<OnboardingRouteArgs>(
+          orElse: () => const OnboardingRouteArgs());
       return CustomPage<dynamic>(
           routeData: routeData,
-          child: const OnboardingScreen(),
+          child: OnboardingScreen(key: args.key),
           transitionsBuilder: TransitionsBuilders.fadeIn,
           opaque: true,
           barrierDismissible: false);
@@ -46,8 +48,10 @@ class _$AppRouter extends RootStackRouter {
           barrierDismissible: false);
     },
     LoginRoute.name: (routeData) {
+      final args = routeData.argsAs<LoginRouteArgs>(
+          orElse: () => const LoginRouteArgs());
       return MaterialPageX<dynamic>(
-          routeData: routeData, child: const LoginScreen());
+          routeData: routeData, child: LoginScreen(key: args.key));
     },
     RegisterRoute.name: (routeData) {
       return MaterialPageX<dynamic>(
@@ -108,11 +112,23 @@ class SplashRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [OnboardingScreen]
-class OnboardingRoute extends PageRouteInfo<void> {
-  const OnboardingRoute()
-      : super(OnboardingRoute.name, path: '/onboarding-screen');
+class OnboardingRoute extends PageRouteInfo<OnboardingRouteArgs> {
+  OnboardingRoute({Key? key})
+      : super(OnboardingRoute.name,
+            path: '/onboarding-screen', args: OnboardingRouteArgs(key: key));
 
   static const String name = 'OnboardingRoute';
+}
+
+class OnboardingRouteArgs {
+  const OnboardingRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'OnboardingRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for
@@ -137,10 +153,22 @@ class MainRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LoginScreen]
-class LoginRoute extends PageRouteInfo<void> {
-  const LoginRoute() : super(LoginRoute.name, path: '');
+class LoginRoute extends PageRouteInfo<LoginRouteArgs> {
+  LoginRoute({Key? key})
+      : super(LoginRoute.name, path: '', args: LoginRouteArgs(key: key));
 
   static const String name = 'LoginRoute';
+}
+
+class LoginRouteArgs {
+  const LoginRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'LoginRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for

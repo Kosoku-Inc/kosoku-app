@@ -1,9 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kosoku/features/navigation/presentation/app_router.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({Key? key}) : super(key: key) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
 
   @override
   Widget build(BuildContext context) {

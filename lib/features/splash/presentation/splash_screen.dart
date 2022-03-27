@@ -10,7 +10,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 2)).then((value) {
-      AutoRouter.of(context).push(const OnboardingRoute());
+      AutoRouter.of(context).replace(const OnboardingRoute());
     });
 
     return Scaffold(

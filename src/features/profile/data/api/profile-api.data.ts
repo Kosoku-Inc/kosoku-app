@@ -1,21 +1,9 @@
-import { mockedGetCurrentUser } from '../../../../mocks/users';
+import { restGatewayAPI } from '../../../../core/data/api/rest-gateway-api.data';
 import { UserResponse } from '../../model/user-response.model';
 
 export class ProfileAPI {
     getUser = async (): Promise<UserResponse> => {
-        const result = await mockedGetCurrentUser();
-
-        if (result) {
-            return {
-                status: 200,
-                data: result,
-            };
-        } else {
-            return {
-                status: 200,
-                error: Error('Invalid token'),
-            };
-        }
+        return restGatewayAPI.get('api/v1/user');
     };
 }
 

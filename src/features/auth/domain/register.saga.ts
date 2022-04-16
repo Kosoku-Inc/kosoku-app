@@ -1,5 +1,5 @@
 import { SagaIterator } from 'redux-saga';
-import { call, takeLatest, put, delay } from 'redux-saga/effects';
+import { call, takeLatest, put } from 'redux-saga/effects';
 
 import { connectionGatewayAPI } from '../../../core/data/api/connection-gateway-api.data';
 import { logger } from '../../../core/utils/logger.utils';
@@ -17,8 +17,6 @@ export function* registerSaga(action: ReturnType<typeof REGISTER.TRIGGER>): Saga
 
     const result = yield call(authAPI.register, action.payload);
 
-    yield delay(3000);
-
     if (result.data) {
         yield call(tokenService.writeTokensToStorage, result.data);
         yield call(tokenService.setAuthToken, result.data);
@@ -26,6 +24,7 @@ export function* registerSaga(action: ReturnType<typeof REGISTER.TRIGGER>): Saga
         const user: UserResponse = yield call(profileAPI.getUser);
 
         if (user.data) {
+            yield call(connectionGatewayAPI.setIsClient, !user.data.driver);
             yield call(connectionGatewayAPI.connect);
             yield call(fetchHistorySaga);
             yield call(getPaymentMethodsSaga);

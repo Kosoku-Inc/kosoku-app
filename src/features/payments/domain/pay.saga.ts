@@ -3,8 +3,6 @@ import { ConfirmPaymentResult, PaymentIntents } from '@stripe/stripe-react-nativ
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
-import { getExistingUser } from '../../../core/data/store/user.selectors';
-import { User } from '../../../core/model/user.model';
 import { logger } from '../../../core/utils/logger.utils';
 import { toastService } from '../../../core/utils/services/toast-service.utils';
 import { paymentsAPI } from '../data/api/payments-api.data';
@@ -23,11 +21,8 @@ function* handleError(error: Error): SagaIterator {
 export function* paySaga(action: ReturnType<typeof PAY.TRIGGER>): SagaIterator {
     yield put(PAY.STARTED());
 
-    const user: User = yield select(getExistingUser);
-
     const result: CreatePaymentIntentResponse = yield call(paymentsAPI.createPaymentIntent, {
         requestThreeDSecure: 'automatic',
-        email: user.email,
         bynAmount: action.payload.amount,
     });
 
@@ -59,11 +54,11 @@ export function* paySaga(action: ReturnType<typeof PAY.TRIGGER>): SagaIterator {
         const _result = yield call(paymentsAPI.paymentFinished, {
             methodId: defaultMethod.id,
             amount: action.payload.amount,
-            timestamp: Date.now(),
+            rideId: 1, // Mock
             paymentId,
         });
 
-        if (_result.status === 200) {
+        if (_result.status >= 200 && _result.status < 300) {
             yield put(PAY.COMPLETED());
         }
 

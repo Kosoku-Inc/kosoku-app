@@ -2,9 +2,7 @@ import Config from 'react-native-config';
 
 const readableEnv = {
     stripePublishableKey: 'STRIPE_PUBLISHABLE_KEY',
-    paymentGatewayAPI: 'PAYMENT_GATEWAY_API',
-    dataGatewayAPI: 'DATA_GATEWAY_API',
-    directionsGatewayAPI: 'DIRECTIONS_GATEWAY_API',
+    restGatewayAPI: 'REST_GATEWAY_API',
     connectionGatewayAPI: 'CONNECTION_GATEWAY_API',
 };
 

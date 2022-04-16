@@ -1,6 +1,7 @@
 import { SagaIterator } from 'redux-saga';
-import { call, delay, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 
+import { connectionGatewayAPI } from '../../../core/data/api/connection-gateway-api.data';
 import { logger } from '../../../core/utils/logger.utils';
 import { toastService } from '../../../core/utils/services/toast-service.utils';
 import { profileAPI } from '../data/api/profile-api.data';
@@ -10,8 +11,6 @@ export function* getUserSaga(): SagaIterator {
     yield put(GET_USER.STARTED());
 
     const result = yield call(profileAPI.getUser);
-
-    yield delay(3000);
 
     if (result.data) {
         yield put(GET_USER.COMPLETED(result.data));

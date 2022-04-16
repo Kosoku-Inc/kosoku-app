@@ -20,8 +20,24 @@ const ErrorToast = (props: ToastConfigParams<unknown>) => {
     );
 };
 
+const SuccessToast = (props: ToastConfigParams<unknown>) => {
+    return (
+        <ToastWrapper>
+            {/* eslint-disable-next-line react-native/no-color-literals */}
+            <ToastIndicator style={{ backgroundColor: 'green' }}>
+                <PseudoBackground />
+            </ToastIndicator>
+            <ToastTextWrapper>
+                <BoldText>{props.text1}</BoldText>
+                <Text>{props.text2}</Text>
+            </ToastTextWrapper>
+        </ToastWrapper>
+    );
+};
+
 const config = {
     error: ErrorToast,
+    success: SuccessToast,
 };
 
 export const Toast: React.FC = () => {

@@ -3,30 +3,43 @@ import { environmentConfig } from '../../utils/third-party/environment-config.ut
 
 // eslint-disable-next-line
 // @ts-ignore
-navigator.__defineGetter__("userAgent", function () {   // you have to import rect native first !!
-    return "react-native";
+navigator.__defineGetter__('userAgent', function () {
+    // you have to import rect native first !!
+    return 'react-native';
 });
 
 // eslint-disable-next-line
 import { io, Socket } from 'socket.io-client';
+// eslint-disable-next-line import/order
+import { toastService } from '../../utils/services/toast-service.utils';
+// eslint-disable-next-line import/order
+import { RideStatus } from '../../model/ride.model';
 
 export enum WSMessageType {
-    DriveRequest = 'DRIVE_REQUEST',
+    RideRequest = 'RIDE_REQUEST',
+    RideStatusChange = 'RIDE_STATUS_CHANGE',
+    RideAccept = 'RIDE_ACCEPT',
+    RideDecline = 'RIDE_DECLINE',
+    RideStopSearch = 'RIDE_STOP_SEARCH',
     LocationUpdate = 'LOCATION_UPDATE',
+    InternalReconnect = 'INTERNAL_RECONNECT',
 }
 
 export type WSMessage = {
     type: WSMessageType;
+    payload?: RideStatus;
 };
 
 export type Listener = (data: WSMessage) => void;
 
 export class ConnectionGatewayAPI {
     private authToken = '';
+    private isClient = false;
     private listeners: Array<Listener> = [];
     private socket: Socket | null = null;
 
     setAuthToken = (token: string) => (this.authToken = token);
+    setIsClient = (flag: boolean) => (this.isClient = flag);
 
     addEventListener = (callback: Listener): (() => void) => {
         this.listeners.push(callback);
@@ -39,33 +52,52 @@ export class ConnectionGatewayAPI {
             this.socket = io(environmentConfig.get('connectionGatewayAPI'), {
                 transports: ['websocket'],
                 auth: {
-                    'Authorization': `Bearer ${this.authToken}`
-                }
+                    Authorization: `Bearer ${this.authToken}`,
+                },
+                reconnection: true,
             });
 
-            this.socket.on('message', (data) => {
-                this.listeners.forEach((listener) => listener(data as WSMessage));
+            Object.values(WSMessageType).forEach((event) => {
+                this.socket?.on(event, (data: WSMessage) => {
+                    this.listeners.forEach((listener) => listener(data));
+                });
             });
 
-            this.socket.on('connect_error', (error) => {
-                logger.log(error);
-                this.disconnect();
-            });
-
-            this.socket.on('connect', () => {
-                logger.log('Socket opened');
-            });
+            this.socket
+                .on('connect_error', (error) => {
+                    logger.log(error);
+                    toastService.showError(undefined, 'Соединение потеряно', 'Восстанавливаем...');
+                    this.retryConnection();
+                })
+                .on('connect', () => {
+                    toastService.showSuccess('Соединение установлено', 'Приятного пользования');
+                    this.listeners.forEach((listener) => listener({ type: WSMessageType.InternalReconnect }));
+                })
+                .on('disconnect', () => {
+                    toastService.showError(undefined, 'Соединение закрыто', 'Восстанавливаем...');
+                });
         } catch (e) {
             logger.log(e);
         }
     };
 
     send = async <T>(event: WSMessageType, data: T) => {
-        this.socket?.emit(event, data);
+        this.socket?.emit(event, {
+            isClient: this.isClient,
+            data
+        });
     };
 
     disconnect = async () => {
         this.socket?.close();
+
+        Object.values(WSMessageType).forEach((event) => {
+            this.socket?.removeAllListeners(event);
+        });
+    };
+
+    private retryConnection = () => {
+        this.socket?.connect();
     };
 }
 

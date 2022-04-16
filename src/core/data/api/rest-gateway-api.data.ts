@@ -4,7 +4,7 @@ import { environmentConfig } from '../../utils/third-party/environment-config.ut
 
 import { BaseAPI } from './base-api.data';
 
-export class PaymentGatewayAPI extends BaseAPI {
+export class RestGatewayAPI extends BaseAPI {
     private authToken = '';
     axios: AxiosInstance;
 
@@ -15,7 +15,7 @@ export class PaymentGatewayAPI extends BaseAPI {
 
     private initialize = (): AxiosInstance => {
         const _axios = axios.create({
-            baseURL: environmentConfig.get('paymentGatewayAPI'),
+            baseURL: environmentConfig.get('restGatewayAPI'),
             timeout: 60000,
         });
 
@@ -39,4 +39,4 @@ export class PaymentGatewayAPI extends BaseAPI {
     };
 }
 
-export const paymentGatewayAPI = new PaymentGatewayAPI();
+export const restGatewayAPI = new RestGatewayAPI();

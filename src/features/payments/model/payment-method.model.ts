@@ -6,6 +6,6 @@ import { PaymentMethodType } from './method-type.model';
 export type PaymentMethod = {
     id: number;
     type: PaymentMethodType;
-    isDefault: Optional<boolean>;
+    isDefault: boolean;
     details: Optional<CardMethodDetails>;
 };

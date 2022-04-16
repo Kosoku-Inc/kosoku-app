@@ -38,10 +38,10 @@ export abstract class BaseAPI {
 
             const _data = typeof result.data === 'string' ? JSON.parse(result.data) : result.data;
 
-            if (_data.error) {
+            if (_data.error || _data.message) {
                 return {
                     status: 400,
-                    error: new Error(_data.error),
+                    error: new Error(_data.error || _data.message),
                 };
             }
 

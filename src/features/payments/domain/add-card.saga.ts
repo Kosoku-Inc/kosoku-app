@@ -1,10 +1,8 @@
 import { confirmPayment } from '@stripe/stripe-react-native';
 import { ConfirmPaymentResult, PaymentIntents } from '@stripe/stripe-react-native/src/types/index';
 import { SagaIterator } from 'redux-saga';
-import { call, delay, put, select, takeLatest } from 'redux-saga/effects';
+import { call, delay, put, takeLatest } from 'redux-saga/effects';
 
-import { getExistingUser } from '../../../core/data/store/user.selectors';
-import { User } from '../../../core/model/user.model';
 import { logger } from '../../../core/utils/logger.utils';
 import { navigationService } from '../../../core/utils/services/navigation-service.utils';
 import { toastService } from '../../../core/utils/services/toast-service.utils';
@@ -23,11 +21,8 @@ function* handleError(error: Error): SagaIterator {
 export function* addCardSaga(action: ReturnType<typeof ADD_CARD.TRIGGER>): SagaIterator {
     yield put(ADD_CARD.STARTED());
 
-    const user: User = yield select(getExistingUser);
-
     const result: CreatePaymentIntentResponse = yield call(paymentsAPI.createPaymentIntent, {
         bynAmount: 300, // rubles * 100
-        email: user.email,
         requestThreeDSecure: 'automatic',
     });
 
@@ -45,12 +40,13 @@ export function* addCardSaga(action: ReturnType<typeof ADD_CARD.TRIGGER>): SagaI
                 stripePaymentId: paymentIntent.paymentMethodId,
             });
 
-            if (result.status === 200) {
+            if (result.status >= 200 && result.status < 300) {
                 yield put(ADD_CARD.COMPLETED());
 
                 yield delay(100);
                 yield call(navigationService.goBack);
                 yield call(getPaymentMethodsSaga);
+                yield call(toastService.showSuccess, 'Карта успешно добавлена', 'Желаем приятных поездок');
             }
 
             if (result.error) {

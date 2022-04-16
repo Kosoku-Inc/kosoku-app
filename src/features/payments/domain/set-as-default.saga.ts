@@ -16,7 +16,7 @@ export function* setAsDefaultPaymentMethodSaga(
 
     const result: SetAsDefaultMethodResponse = yield call(paymentsAPI.setAsDefaultMethod, action.payload);
 
-    if (result.status === 200) {
+    if (result.status >= 200 && result.status < 300) {
         yield put(SET_AS_DEFAULT_PAYMENT_METHOD.COMPLETED());
         yield call(getPaymentMethodsSaga);
     }

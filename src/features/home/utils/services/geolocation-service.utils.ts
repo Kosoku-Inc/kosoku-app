@@ -8,6 +8,8 @@ import { logger } from '../../../../core/utils/logger.utils';
 import { Location } from '../../model/location.model';
 
 export class GeolocationService {
+    private latestLocation: Location | null = null;
+
     private commonGeolocationOptions: GeolocationOptions = {
         enableHighAccuracy: true,
     };
@@ -31,9 +33,16 @@ export class GeolocationService {
                     });
                 },
                 (error: GeolocationError) => {
-                    reject(error);
+                    if (this.latestLocation) {
+                        resolve(this.latestLocation);
+                    } else {
+                        reject(error);
+                    }
                 },
-                this.commonGeolocationOptions
+                {
+                    ...this.commonGeolocationOptions,
+                    timeout: 5000,
+                }
             );
         });
     };
@@ -41,10 +50,12 @@ export class GeolocationService {
     subscribeToPositionChange = (listener: (data: Location) => void): (() => void) => {
         const subID = Geolocation.watchPosition(
             (location) => {
-                listener({
+                this.latestLocation = {
                     latitude: location.coords.latitude,
                     longitude: location.coords.longitude,
-                });
+                };
+
+                listener({ ...this.latestLocation });
             },
             logger.log,
             this.commonGeolocationOptions

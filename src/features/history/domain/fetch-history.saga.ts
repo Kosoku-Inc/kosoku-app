@@ -1,5 +1,5 @@
 import { SagaIterator } from 'redux-saga';
-import { call, put, takeLatest, delay } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 
 import { logger } from '../../../core/utils/logger.utils';
 import { toastService } from '../../../core/utils/services/toast-service.utils';
@@ -11,8 +11,6 @@ export function* fetchHistorySaga(): SagaIterator {
     yield put(FETCH_HISTORY.STARTED());
 
     const result: HistoryResponse = yield call(historyAPI.getHistory);
-
-    yield delay(1000);
 
     if (result.data) {
         yield put(FETCH_HISTORY.COMPLETED(result.data));

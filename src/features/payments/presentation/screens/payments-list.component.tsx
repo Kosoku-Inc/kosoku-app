@@ -31,6 +31,8 @@ export const PaymentsList = ({ navigation }: { navigation: StackNavigationProp<n
         navigation.navigate(screens.main.payments.addCard as never);
     }, [navigation]);
 
+    console.log(methods);
+
     return (
         <SafeBackground edges={['top']}>
             <Header title={'Способы оплаты'} />
@@ -38,7 +40,7 @@ export const PaymentsList = ({ navigation }: { navigation: StackNavigationProp<n
                 refreshControl={<RefreshControl refreshing={isLoading} onRefresh={getPaymentsList} />}
                 contentContainerStyle={{ alignItems: 'center' }}
             >
-                {methods.map((method) => (
+                {[...methods].reverse().map((method) => (
                     <PaymentMethodComponent method={method} key={method.id.toString()} />
                 ))}
                 <Button

@@ -36,7 +36,9 @@ export function* initializationSaga(): SagaIterator {
             const user: UserResponse = yield call(profileAPI.getUser);
 
             if (user.data) {
+                yield call(connectionGatewayAPI.setIsClient, !user.data.driver);
                 yield call(connectionGatewayAPI.connect);
+
                 yield call(fetchHistorySaga);
                 yield call(getPaymentMethodsSaga);
 

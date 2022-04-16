@@ -14,7 +14,7 @@ export function* removePaymentMethodSaga(action: ReturnType<typeof REMOVE_PAYMEN
 
     const result: RemovePaymentMethodResponse = yield call(paymentsAPI.removePaymentMethod, action.payload);
 
-    if (result.status === 200) {
+    if (result.status >= 200 && result.status < 300) {
         yield put(REMOVE_PAYMENT_METHOD.COMPLETED());
         yield call(getPaymentMethodsSaga);
     }

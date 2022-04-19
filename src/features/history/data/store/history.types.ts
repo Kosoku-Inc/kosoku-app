@@ -1,4 +1,4 @@
+import { Ride } from '../../../../core/model/ride.model';
 import { State } from '../../../../core/model/state.model';
-import { Order } from '../../model/order.model';
 
-export type HistoryState = State<Array<Order>>;
+export type HistoryState = State<Array<Ride>>;

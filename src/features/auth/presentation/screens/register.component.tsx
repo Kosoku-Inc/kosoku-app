@@ -8,7 +8,7 @@ import { Gender } from '../../../../core/model/gender.model';
 import { SafeBackground } from '../../../../core/presentation/background/background.styled';
 import { Button } from '../../../../core/presentation/button/button.component';
 import { Header } from '../../../../core/presentation/header/header.component';
-import { DefaultCart } from '../../../../core/presentation/horizontal-picker/default-card.component';
+import { DefaultCard } from '../../../../core/presentation/horizontal-picker/default-card.component';
 import { HorizontalPicker } from '../../../../core/presentation/horizontal-picker/horizontal-picker.component';
 import { TextInput } from '../../../../core/presentation/text-input/text-input.component';
 import { toastService } from '../../../../core/utils/services/toast-service.utils';
@@ -209,13 +209,13 @@ const splitWidth = (width - defaultTheme.spacer * 11) / 2;
 const splitWidthThree = (width - defaultTheme.spacer * 14) / 3;
 
 const roleRenderList = [
-    <DefaultCart
+    <DefaultCard
         title={'Клиент'}
         key={'Клиент'}
         asset={require('../../../../../assets/icons/client.png')}
         style={{ minWidth: splitWidth }}
     />,
-    <DefaultCart
+    <DefaultCard
         title={'Водитель'}
         key={'Водитель'}
         asset={require('../../../../../assets/icons/driver.png')}
@@ -224,12 +224,12 @@ const roleRenderList = [
 ];
 
 const genderRenderList = [
-    <DefaultCart title={'Мужчина'} key={'Мужчина'} style={{ minWidth: splitWidth }} />,
-    <DefaultCart title={'Женщина'} key={'Женщина'} style={{ minWidth: splitWidth }} />,
+    <DefaultCard title={'Мужчина'} key={'Мужчина'} style={{ minWidth: splitWidth }} />,
+    <DefaultCard title={'Женщина'} key={'Женщина'} style={{ minWidth: splitWidth }} />,
 ];
 
 const carClassRenderList = [
-    <DefaultCart title={'Эконом'} key={'Эконом'} style={{ minWidth: splitWidthThree }} />,
-    <DefaultCart title={'Комфорт'} key={'Комфорт'} style={{ minWidth: splitWidthThree }} />,
-    <DefaultCart title={'Бизнес'} key={'Бизнес'} style={{ minWidth: splitWidthThree }} />,
+    <DefaultCard title={'Эконом'} key={'Эконом'} style={{ minWidth: splitWidthThree }} />,
+    <DefaultCard title={'Комфорт'} key={'Комфорт'} style={{ minWidth: splitWidthThree }} />,
+    <DefaultCard title={'Бизнес'} key={'Бизнес'} style={{ minWidth: splitWidthThree }} />,
 ];

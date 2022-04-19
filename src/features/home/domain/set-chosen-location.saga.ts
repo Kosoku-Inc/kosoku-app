@@ -33,5 +33,5 @@ export function* setChosenLocationSaga(action: ReturnType<typeof SET_CHOSEN_LOCA
 }
 
 export function* listenForSetChosenLocation(): SagaIterator {
-    yield debounce(1000, SET_CHOSEN_LOCATION.TRIGGER, setChosenLocationSaga);
+    yield debounce(500, SET_CHOSEN_LOCATION.TRIGGER, setChosenLocationSaga);
 }

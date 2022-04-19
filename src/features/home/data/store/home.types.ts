@@ -1,24 +1,47 @@
 import { Optional } from '../../../../core/model/optional.model';
-import {RideStatus} from '../../../../core/model/ride.model';
+import { ExtendedRideRequest, Ride, RideRequest, RideStatus } from '../../../../core/model/ride.model';
 import { State } from '../../../../core/model/state.model';
-import {User} from '../../../../core/model/user.model';
 import { ExtendedLocation } from '../../model/location.model';
-import {CarClass} from '../../../../core/model/car-class.model';
+
+export type RideState = {
+    status: RideStatus;
+    driverPosition?: Optional<Location>;
+    ride?: Optional<Ride>;
+};
+
+export type DirectionChooseResult = {
+    pickedLocation: Optional<ExtendedLocation>;
+    searchResults: Array<ExtendedLocation>;
+};
+
+export type ChooseRouteState = {
+    from: State<DirectionChooseResult>;
+    to: State<DirectionChooseResult>;
+    latestChange?: 'to' | 'from';
+    isChoosingRoute: boolean;
+};
+
+export type PrepareRide = {
+    isPreparing: boolean;
+    rideRequest: State<RideRequest>;
+    isCarSearching: boolean;
+    from: ExtendedLocation;
+    to: ExtendedLocation;
+};
+
+export type PrepareDriverRide = {
+    rideRequest: Optional<ExtendedRideRequest>;
+};
+
+export type PointerLocation = {
+    location: Optional<ExtendedLocation>;
+    isMoving: boolean;
+};
 
 export type HomeState = {
-    pointerLocation: State<{
-        location: Optional<ExtendedLocation>;
-        isMoving: boolean;
-    }>;
-    ride: {
-        status: RideStatus;
-        isCarSearching: boolean;
-        currentDriver?: User;
-        driverPosition?: Location;
-        computedDetails?: State<{
-            route: unknown; // TO-DO
-            time: number;
-            classes: Record<CarClass, number>;
-        }>
-    };
+    pointerLocation: State<PointerLocation>;
+    chooseRoute: ChooseRouteState;
+    prepareRide: PrepareRide;
+    prepareDriverRide: PrepareDriverRide;
+    ride: RideState;
 };

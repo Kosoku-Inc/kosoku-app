@@ -3,7 +3,7 @@ import { UserResponse } from '../../model/user-response.model';
 
 export class ProfileAPI {
     getUser = async (): Promise<UserResponse> => {
-        return restGatewayAPI.get('api/v1/user');
+        return restGatewayAPI.get('/api/v1/user');
     };
 }
 

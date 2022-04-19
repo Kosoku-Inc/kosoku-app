@@ -11,8 +11,16 @@ export class BottomSheetService {
         setTimeout(() => this.bottomSheetRef?.expand(), 100);
     };
 
+    snapToIndex = (index: number) => {
+        setTimeout(() => this.bottomSheetRef?.snapToIndex(index), 100);
+    };
+
     minimize = () => {
         this.bottomSheetRef?.snapToIndex(0);
+    };
+
+    close = () => {
+        setTimeout(() => this.bottomSheetRef?.forceClose(), 100);
     };
 }
 

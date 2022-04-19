@@ -13,3 +13,13 @@ export const toReadableCarClass = (clazz: Optional<CarClass>): string => {
             return '';
     }
 };
+
+const classAssets: Record<CarClass, number> = {
+    [CarClass.Economy]: require('../../../../assets/icons/car_classes/economy.png'),
+    [CarClass.Comfort]: require('../../../../assets/icons/car_classes/comfort.png'),
+    [CarClass.Business]: require('../../../../assets/icons/car_classes/business.png'),
+};
+
+export const toCarClassAsset = (clazz: CarClass): number => {
+    return classAssets[clazz];
+};

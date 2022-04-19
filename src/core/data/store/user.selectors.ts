@@ -20,3 +20,8 @@ export const getIsUserLoading: Selector<ApplicationState, boolean> = createSelec
     getUserState,
     (state) => state.isLoading
 );
+
+export const getIsDriver: Selector<ApplicationState, boolean> = createSelector(
+    getUserState,
+    (state) => !!state.data?.driver ?? false
+);

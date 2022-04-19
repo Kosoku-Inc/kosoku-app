@@ -21,54 +21,58 @@ function* handleError(error: Error): SagaIterator {
 export function* paySaga(action: ReturnType<typeof PAY.TRIGGER>): SagaIterator {
     yield put(PAY.STARTED());
 
-    const result: CreatePaymentIntentResponse = yield call(paymentsAPI.createPaymentIntent, {
-        requestThreeDSecure: 'automatic',
-        bynAmount: action.payload.amount,
-    });
+    const defaultMethod: PaymentMethod = yield select(getDefaultPaymentMethod);
+    let paymentId = (Math.random() + 1).toString(36).substring(2);
 
-    if (result.data) {
-        const secret = result.data.clientSecret;
-        const defaultMethod: PaymentMethod = yield select(getDefaultPaymentMethod);
-        let paymentId = (Math.random() + 1).toString(36).substring(2);
-
-        if (defaultMethod.type === PaymentMethodType.Card) {
-            const { error, paymentIntent }: ConfirmPaymentResult = yield call(confirmPayment, secret, {
-                type: 'Card',
-                // eslint-disable-next-line
-                paymentMethodId: defaultMethod.details!.stripePaymentId,
-            });
-
-            if (error) {
-                yield call(handleError, new Error(error.message));
-                return;
-            }
-
-            if (paymentIntent?.status !== PaymentIntents.Status.Succeeded) {
-                yield call(logger.log, paymentIntent);
-                return;
-            }
-
-            paymentId = paymentIntent.id;
-        }
-
-        const _result = yield call(paymentsAPI.paymentFinished, {
-            methodId: defaultMethod.id,
-            amount: action.payload.amount,
-            rideId: 1, // Mock
-            paymentId,
+    if (defaultMethod.type === PaymentMethodType.Card) {
+        const result: CreatePaymentIntentResponse = yield call(paymentsAPI.createPaymentIntent, {
+            requestThreeDSecure: 'automatic',
+            bynAmount: action.payload.amount,
         });
 
-        if (_result.status >= 200 && _result.status < 300) {
-            yield put(PAY.COMPLETED());
+        if (result.data) {
+            const secret = result.data.clientSecret;
+
+            if (defaultMethod.type === PaymentMethodType.Card) {
+                const {error, paymentIntent}: ConfirmPaymentResult = yield call(confirmPayment, secret, {
+                    type: 'Card',
+                    // eslint-disable-next-line
+                    paymentMethodId: defaultMethod.details!.stripePaymentId,
+                });
+
+                if (error) {
+                    yield call(handleError, new Error(error.message));
+                    return;
+                }
+
+                if (paymentIntent?.status !== PaymentIntents.Status.Succeeded) {
+                    yield call(logger.log, paymentIntent);
+                    return;
+                }
+
+                paymentId = paymentIntent.id;
+            }
         }
 
-        if (_result.error) {
-            yield call(handleError, _result.error);
+        if (result.error) {
+            yield call(handleError, result.error);
         }
     }
 
-    if (result.error) {
-        yield call(handleError, result.error);
+    const _result = yield call(paymentsAPI.paymentFinished, {
+        methodId: defaultMethod.id,
+        amount: action.payload.amount,
+        rideId: action.payload.rideId, // Mock
+        paymentId,
+    });
+
+    if (_result.status >= 200 && _result.status < 300) {
+        yield put(PAY.COMPLETED());
+        yield call(toastService.showSuccess, 'Заказ оплачен', 'Спасибо, что Вы с нами!')
+    }
+
+    if (_result.error) {
+        yield call(handleError, _result.error);
     }
 }
 

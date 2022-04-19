@@ -1,6 +1,12 @@
 import { CarClass } from './car-class.model';
 import { Gender } from './gender.model';
 
+export type Driver = {
+    carBrand: string;
+    carClass: CarClass;
+    balance: number;
+};
+
 export type User = {
     id: number;
     email: string;
@@ -8,9 +14,5 @@ export type User = {
     firstName: string;
     lastName: string;
     gender: Gender;
-    driver?: {
-        carBrand: string;
-        carClass: CarClass;
-        balance: number;
-    };
+    driver?: Driver;
 };

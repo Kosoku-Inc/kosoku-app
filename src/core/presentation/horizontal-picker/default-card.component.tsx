@@ -10,7 +10,7 @@ export type DefaultCardProps = {
     style?: StyleProp<ViewStyle>;
 };
 
-export const DefaultCart: React.FC<DefaultCardProps> = (props: DefaultCardProps) => {
+export const DefaultCard: React.FC<DefaultCardProps> = (props: DefaultCardProps) => {
     return (
         <DefaultCardWrapper style={props.style}>
             {!!props.asset && <Icon source={props.asset} style={props.iconStyle} />}

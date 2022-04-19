@@ -3,7 +3,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 
 import { IconWrapper, PointerWrapper, Round } from './pointer.styled';
 
-export type PointerProps = never;
+export type PointerProps = unknown;
 
 export type PointerRef = {
     start: () => void;
@@ -38,7 +38,7 @@ export const Pointer = React.forwardRef(function Pointer(props: PointerProps, re
         <PointerWrapper>
             <IconWrapper>
                 <Round />
-                <Animated.View style={legStyle}></Animated.View>
+                <Animated.View style={legStyle}/>
             </IconWrapper>
         </PointerWrapper>
     );

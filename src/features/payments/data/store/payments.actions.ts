@@ -12,6 +12,7 @@ export type AddCardPayload = {
 
 export type PayPayload = {
     amount: number;
+    rideId: number;
 };
 
 export const GET_PAYMENT_METHODS = {

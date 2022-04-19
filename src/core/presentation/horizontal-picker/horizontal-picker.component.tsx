@@ -5,6 +5,7 @@ import { PickerWrapper, PickingItem } from './horizontal-picker.styled';
 export type HorizontalPickerProps = {
     content: Array<React.ReactNode>;
     onSelectionChange: (index: number) => void;
+    disabled?: boolean;
 };
 
 export const HorizontalPicker: React.FC<HorizontalPickerProps> = (props: HorizontalPickerProps) => {
@@ -12,6 +13,8 @@ export const HorizontalPicker: React.FC<HorizontalPickerProps> = (props: Horizon
 
     const handleChoose = useCallback(
         (index: number) => {
+            if (props.disabled) return;
+
             props.onSelectionChange(index);
             setSelected(index);
         },

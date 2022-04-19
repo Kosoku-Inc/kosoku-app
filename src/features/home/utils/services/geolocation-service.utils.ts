@@ -8,7 +8,7 @@ import { logger } from '../../../../core/utils/logger.utils';
 import { Location } from '../../model/location.model';
 
 export class GeolocationService {
-    private latestLocation: Location | null = null;
+    latestLocation: Location | null = null;
 
     private commonGeolocationOptions: GeolocationOptions = {
         enableHighAccuracy: true,

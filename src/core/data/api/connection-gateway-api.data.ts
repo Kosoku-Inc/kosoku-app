@@ -21,13 +21,14 @@ export enum WSMessageType {
     RideAccept = 'RIDE_ACCEPT',
     RideDecline = 'RIDE_DECLINE',
     RideStopSearch = 'RIDE_STOP_SEARCH',
+    RideTimeout = 'RIDE_TIMEOUT',
     LocationUpdate = 'LOCATION_UPDATE',
     InternalReconnect = 'INTERNAL_RECONNECT',
 }
 
 export type WSMessage = {
     type: WSMessageType;
-    payload?: RideStatus;
+    payload?: RideStatus | unknown;
 };
 
 export type Listener = (data: WSMessage) => void;
@@ -58,8 +59,8 @@ export class ConnectionGatewayAPI {
             });
 
             Object.values(WSMessageType).forEach((event) => {
-                this.socket?.on(event, (data: WSMessage) => {
-                    this.listeners.forEach((listener) => listener(data));
+                this.socket?.on(event, (data) => {
+                    this.listeners.forEach((listener) => listener({ type: event, payload: data }));
                 });
             });
 
@@ -84,7 +85,7 @@ export class ConnectionGatewayAPI {
     send = async <T>(event: WSMessageType, data: T) => {
         this.socket?.emit(event, {
             isClient: this.isClient,
-            data
+            data,
         });
     };
 

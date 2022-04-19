@@ -1,7 +1,6 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { connectionGatewayAPI } from '../../../core/data/api/connection-gateway-api.data';
 import { logger } from '../../../core/utils/logger.utils';
 import { toastService } from '../../../core/utils/services/toast-service.utils';
 import { profileAPI } from '../data/api/profile-api.data';

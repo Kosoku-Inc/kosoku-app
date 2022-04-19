@@ -13,7 +13,7 @@ export function* initializeMapSaga(): SagaIterator {
     try {
         const currentLocation = yield call(geolocationService.getLocation);
 
-        yield call(mapService.animateToRegion, currentLocation, 15);
+        yield call(mapService.animateCamera, currentLocation, 15);
         yield put(SET_CHOSEN_LOCATION.TRIGGER(currentLocation));
 
         yield spawn(bootstrapGPSSubscription);

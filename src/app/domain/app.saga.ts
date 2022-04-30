@@ -6,7 +6,7 @@ import { listenForLogout } from '../../features/auth/domain/logout.saga';
 import { listenForRegister } from '../../features/auth/domain/register.saga';
 import { listenForFetchHistory } from '../../features/history/domain/fetch-history.saga';
 import { listenForChooseRoute } from '../../features/home/domain/choose-route.saga';
-import { listenForDeclineRide, listenForDeclineRideRequest } from '../../features/home/domain/decline-ride.saga';
+import { listenForDeclineRideRequest } from '../../features/home/domain/decline-ride.saga';
 import { listenForFetchPlaces } from '../../features/home/domain/fetch-places.saga';
 import { listenForInitializeMap } from '../../features/home/domain/initialize-map.saga';
 import { listenForPrepareRide } from '../../features/home/domain/prepare-ride-data.saga';
@@ -44,6 +44,5 @@ export function* appSaga(): SagaIterator {
     yield spawn(listenForPrepareRide);
     yield spawn(listenForChooseRoute);
     yield spawn(listenForDeclineRideRequest);
-    yield spawn(listenForDeclineRide);
     yield spawn(listenForSetRideStatus);
 }

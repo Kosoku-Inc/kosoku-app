@@ -1,12 +1,21 @@
 import { Optional } from '../../../../core/model/optional.model';
-import { ExtendedRideRequest, Ride, RideRequest, RideStatus } from '../../../../core/model/ride.model';
+import {
+    ExtendedDriverRideRequest,
+    Ride,
+    RideRequest,
+    RideStatus,
+} from '../../../../core/model/ride.model';
 import { State } from '../../../../core/model/state.model';
-import { ExtendedLocation } from '../../model/location.model';
+import {ExtendedLocation, Location} from '../../model/location.model';
 
 export type RideState = {
     status: RideStatus;
     driverPosition?: Optional<Location>;
     ride?: Optional<Ride>;
+    route?: Optional<Array<Location>>;
+    toPickUp?: Optional<Array<Location>>;
+    to?: Location;
+    from?: Location;
 };
 
 export type DirectionChooseResult = {
@@ -30,7 +39,7 @@ export type PrepareRide = {
 };
 
 export type PrepareDriverRide = {
-    rideRequest: Optional<ExtendedRideRequest>;
+    rideRequest: Optional<ExtendedDriverRideRequest>;
 };
 
 export type PointerLocation = {

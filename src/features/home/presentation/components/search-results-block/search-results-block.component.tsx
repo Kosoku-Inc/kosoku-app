@@ -46,7 +46,7 @@ export const SearchResultsBlock: React.FC = () => {
     return (
         <BottomSheetFlatList
             data={toRender}
-            keyExtractor={(item) => `${item.latitude}${item.longitude}`}
+            keyExtractor={(item, index) => `${item.latitude}${item.longitude}${index}`}
             contentContainerStyle={{ marginTop: 25 }}
             renderItem={({ item }) => (
                 <SearchResultWrapper onPress={() => onResultPress(item)}>

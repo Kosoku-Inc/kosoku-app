@@ -2,9 +2,15 @@ import { createSelector, Selector } from 'reselect';
 
 import { ApplicationState } from '../../../../app/data/store/app.types';
 import { Optional } from '../../../../core/model/optional.model';
-import { ExtendedRideRequest, Ride, RideRequest, RideStatus } from '../../../../core/model/ride.model';
+import {
+    ExtendedDriverRideRequest,
+    Ride,
+    RideRequest,
+    RideStatus,
+} from '../../../../core/model/ride.model';
 import { State } from '../../../../core/model/state.model';
 import { ExtendedLocation } from '../../model/location.model';
+import { Location } from '../../model/location.model';
 
 import {
     ChooseRouteState,
@@ -138,7 +144,7 @@ export const getDriverRide: Selector<ApplicationState, PrepareDriverRide> = crea
     (state) => state.prepareDriverRide
 );
 
-export const getDriverRideRequest: Selector<ApplicationState, Optional<ExtendedRideRequest>> = createSelector(
+export const getDriverRideRequest: Selector<ApplicationState, Optional<ExtendedDriverRideRequest>> = createSelector(
     getDriverRide,
     (state) => state.rideRequest
 );
@@ -172,4 +178,24 @@ export const getRideClient: Selector<ApplicationState, Optional<User>> = createS
 export const getRide: Selector<ApplicationState, Optional<Ride>> = createSelector(
     getHomeState,
     (state) => state.ride.ride
+);
+
+export const getRideStateRoute: Selector<ApplicationState, Optional<Array<Location>>> = createSelector(
+    getHomeState,
+    state => state.ride.route
+);
+
+export const getRideStateToPickUp: Selector<ApplicationState, Optional<Array<Location>>> = createSelector(
+    getHomeState,
+    state => state.ride.toPickUp
+);
+
+export const getRideStateToPoint: Selector<ApplicationState, Optional<Location>> = createSelector(
+    getHomeState,
+    state => state.ride.to
+);
+
+export const getRideStateFromPoint: Selector<ApplicationState, Optional<Location>> = createSelector(
+    getHomeState,
+    state => state.ride.from
 );

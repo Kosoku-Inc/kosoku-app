@@ -30,7 +30,7 @@ export const HistoryScreen: React.FC = () => {
         <SafeBackground edges={['top']}>
             <Header title={'История поездок'} />
             <FlatList
-                data={data}
+                data={[...data].reverse()}
                 onRefresh={getHistory}
                 refreshing={isLoading}
                 keyExtractor={(item) => item.id.toString()}

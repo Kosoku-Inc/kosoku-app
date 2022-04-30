@@ -16,6 +16,7 @@ export const SearchResultWrapper = styled.Pressable`
 
 export const Readable = styled.Text`
     font-family: ${getFontName(FontType.semibold)};
+    max-width: 80%;
 `;
 
 SearchResultWrapper.defaultProps = {

@@ -47,7 +47,7 @@ export const ChooseClass: React.FC = () => {
                         <DefaultCard
                             key={clazz}
                             title={`${toReadableCarClass(clazz as CarClass)} - ${
-                                rideRequest.classes[clazz as CarClass]
+                                rideRequest.classes[clazz as CarClass].toFixed(2)
                             }p`}
                             style={{ width: 150, opacity: isCarSearching ? 0.5 : 1 }}
                             asset={toCarClassAsset(clazz as CarClass)}

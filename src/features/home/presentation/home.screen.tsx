@@ -2,7 +2,7 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import React, { useCallback, useMemo } from 'react';
 import { Keyboard, View, StyleSheet } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, {Marker, Polyline, PROVIDER_GOOGLE} from 'react-native-maps';
 import { useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
@@ -20,6 +20,12 @@ import {
     getPrepareRideFromLocation,
     getPrepareRideToLocation,
     getRideRequest,
+    getDriverRideRequest,
+    getRideStateRoute,
+    getRideStateToPickUp,
+    getRide,
+    getRideStateToPoint,
+    getRideStateFromPoint, getHomeState,
 } from '../data/store/home.selectors';
 import { useMapSetup } from '../utils/hooks/use-map-setup.utils';
 import { bottomSheetService } from '../utils/services/bottom-sheet-service.utils';
@@ -38,8 +44,10 @@ import { StatusWrapper } from './components/status/status.styled';
 
 export const HomeScreen = ({ navigation }: { navigation: DrawerNavigationProp<never> }) => {
     const insets = useSafeAreaInsets();
-    const rideRequest = useSelector(getRideRequest);
     const animatedSheetPosition = useSharedValue(0);
+
+    const clientRideRequest = useSelector(getRideRequest);
+    const driverRideRequest = useSelector(getDriverRideRequest);
 
     const isPreparing = useSelector(getIsRidePreparing);
     const isChoosingRoute = useSelector(getIsChoosingRoute);
@@ -49,12 +57,48 @@ export const HomeScreen = ({ navigation }: { navigation: DrawerNavigationProp<ne
     const isDriverRequested = useSelector(getIsDriverRequested);
     const isUserOnRide = useSelector(getIsUserOnRide);
 
-    const to = useSelector(getPrepareRideToLocation);
-    const from = useSelector(getPrepareRideFromLocation);
+    const clientTo = useSelector(getPrepareRideToLocation);
+    const clientFrom = useSelector(getPrepareRideFromLocation);
+    const rideTo = useSelector(getRideStateToPoint);
+    const rideFrom = useSelector(getRideStateFromPoint);
+
+    const rideStateRoute = useSelector(getRideStateRoute);
+    const rideStateToPickUp = useSelector(getRideStateToPickUp);
+
+    console.log(rideStateToPickUp)
+
+    const to = useMemo(() => {
+        if(rideTo) return rideTo;
+
+        if(isDriver && driverRideRequest?.to) {
+            return driverRideRequest.to;
+        } else if(clientTo) {
+            return clientTo;
+        }
+
+        return null;
+    }, [isDriver, clientTo, driverRideRequest, rideTo]);
+
+    const from = useMemo(() => {
+        if(rideFrom) return rideFrom;
+
+        if(isDriver && driverRideRequest?.from) {
+            return driverRideRequest.from;
+        } else if(clientFrom) {
+            return clientFrom;
+        }
+
+        return null;
+    }, [isDriver, clientFrom, driverRideRequest, rideFrom]);
+
+    const rideRequest = useMemo(() => isDriver ? driverRideRequest : clientRideRequest, [isDriver, driverRideRequest, clientRideRequest]);
+
+    const route = useMemo(() => rideStateRoute ?? rideRequest?.route, [rideStateRoute, rideRequest]);
+    const toPickUp = useMemo(() => rideStateToPickUp ?? driverRideRequest?.toPickUp, [rideStateToPickUp, driverRideRequest]);
 
     const isDraggable = useMemo(
-        () => (!isDriver && !isCarSearching && !isPreparing) || (!rideRequest && isDriver),
-        [isDriver, isCarSearching, rideRequest, isPreparing]
+        () => (!isDriver && !isCarSearching && !isPreparing) || (!clientRideRequest && isDriver),
+        [isDriver, isCarSearching, clientRideRequest, isPreparing]
     );
 
     const onBottomSheetAnimate = useCallback((fromIndex: number, toIndex: number) => {
@@ -80,10 +124,23 @@ export const HomeScreen = ({ navigation }: { navigation: DrawerNavigationProp<ne
                 rotateEnabled={false}
                 onRegionChangeComplete={!isDriver && isChoosingRoute ? onRegionChangeComplete : undefined}
             >
-                {isPreparing && !!from && !!to && (
+                {!!from && !!to && (
                     <>
                         <Marker coordinate={from} />
                         <Marker coordinate={to} />
+                        {!!route && (
+                            <Polyline
+                                coordinates={route}
+                                strokeWidth={2}
+                                strokeColor={'red'}
+                            />
+                        )}
+                        {!!toPickUp && (
+                            <Polyline
+                                coordinates={toPickUp}
+                                strokeWidth={2}
+                            />
+                        )}
                     </>
                 )}
             </MapView>
@@ -92,7 +149,7 @@ export const HomeScreen = ({ navigation }: { navigation: DrawerNavigationProp<ne
                 <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.5)' }} />
             )}
             {!isDriver && isChoosingRoute && <Pointer ref={pointerRef} />}
-            {isDriver && !!rideRequest && <Pointer />}
+            {isDriver && !!clientRideRequest && <Pointer />}
             <StatusWrapper style={{ top: insets.top }}>
                 <Status />
             </StatusWrapper>

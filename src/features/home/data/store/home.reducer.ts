@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { RideStatus } from '../../../../core/model/ride.model';
+import {RideRequest, RideStatus} from '../../../../core/model/ride.model';
 import { ExtendedLocation } from '../../model/location.model';
 
 import {
@@ -160,11 +160,31 @@ export const homeReducer = createReducer<HomeState>({ ...initialState }, (builde
             state.prepareRide.isCarSearching = false;
         })
         .addCase(SET_DRIVER_RIDE_REQUEST, (state, action) => {
+            if (!action.payload) {
+                state.ride.toPickUp = state.prepareDriverRide.rideRequest?.toPickUp;
+
+                state.ride.route = state.prepareDriverRide.rideRequest?.route;
+
+                state.ride.to = state.prepareDriverRide.rideRequest?.to;
+                state.ride.from = state.prepareDriverRide.rideRequest?.from;
+
+                state.prepareRide.to = state.prepareDriverRide.rideRequest!.to;
+                state.prepareRide.from = state.prepareDriverRide.rideRequest!.from;
+
+                state.prepareRide.rideRequest.data = {
+                    route: state.prepareDriverRide.rideRequest!.route,
+                } as RideRequest;
+            }
+
             state.prepareDriverRide.rideRequest = action.payload;
         })
         .addCase(SET_RIDE, (state, action) => {
             state.ride.ride = action.payload;
             state.ride.status = action.payload.status;
+
+            state.ride.route = state.prepareRide.rideRequest.data?.route
+            state.ride.to = state.prepareRide.to ?? state.prepareDriverRide.rideRequest?.to;
+            state.ride.from = state.prepareRide.from ?? state.prepareDriverRide.rideRequest?.from;
 
             // Reset
             state.prepareRide = { ...initialState.prepareRide };

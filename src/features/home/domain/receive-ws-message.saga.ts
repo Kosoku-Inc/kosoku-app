@@ -3,7 +3,7 @@ import {call, put, select, takeLatest} from 'redux-saga/effects';
 
 import {connectionGatewayAPI, WSMessage, WSMessageType} from '../../../core/data/api/connection-gateway-api.data';
 import {getExistingUser} from '../../../core/data/store/user.selectors';
-import {ExtendedRideRequest, Ride, RideStatus} from '../../../core/model/ride.model';
+import {ExtendedDriverRideRequest, ExtendedRideRequest, Ride, RideStatus} from '../../../core/model/ride.model';
 import {User} from '../../../core/model/user.model';
 import {logger} from '../../../core/utils/logger.utils';
 import {toastService} from '../../../core/utils/services/toast-service.utils';
@@ -42,7 +42,7 @@ export function* receiveWebSocketMessageSaga(message: WSMessage): SagaIterator {
             break;
         }
         case WSMessageType.RideRequest: {
-            const data = message.payload as { data: ExtendedRideRequest };
+            const data = message.payload as { data: ExtendedDriverRideRequest };
 
             if (!user.driver) {
                 break;

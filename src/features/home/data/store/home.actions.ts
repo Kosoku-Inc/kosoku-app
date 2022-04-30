@@ -3,7 +3,13 @@ import { createAction } from '@reduxjs/toolkit';
 import { WSMessageType } from '../../../../core/data/api/connection-gateway-api.data';
 import { CarClass } from '../../../../core/model/car-class.model';
 import { Optional } from '../../../../core/model/optional.model';
-import { ExtendedRideRequest, Ride, RideRequest, RideStatus } from '../../../../core/model/ride.model';
+import {
+    ExtendedDriverRideRequest,
+    ExtendedRideRequest,
+    Ride,
+    RideRequest,
+    RideStatus,
+} from '../../../../core/model/ride.model';
 import { ExtendedLocation, Location } from '../../model/location.model';
 
 export type RouteLocationPayload = {
@@ -49,7 +55,7 @@ export const REQUEST_RIDE = {
 
 export const SET_RIDE_REQUEST = createAction<Optional<RideRequest>>('[Set Ride Request]');
 
-export const SET_DRIVER_RIDE_REQUEST = createAction<Optional<ExtendedRideRequest>>('[Set Driver Ride Request]');
+export const SET_DRIVER_RIDE_REQUEST = createAction<Optional<ExtendedDriverRideRequest>>('[Set Driver Ride Request]');
 
 export const ANSWER_TO_RIDE_REQUEST = createAction<WSMessageType>('[Answer To Ride Request]');
 

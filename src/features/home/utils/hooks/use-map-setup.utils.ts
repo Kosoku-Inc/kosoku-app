@@ -30,8 +30,8 @@ export const revertChooseRouteClientSnaps = [
 export const prepareRideSnaps = [300];
 
 // Driver snaps
-export const idleSnaps = ['10%'];
-export const requestedSnaps = ['35%'];
+export const idleSnaps = [100];
+export const requestedSnaps = [300];
 export const onRideSnaps = [300];
 
 export const useMapSetup = (): MapUtils => {

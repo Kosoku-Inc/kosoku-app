@@ -1,4 +1,4 @@
-import { ExtendedLocation } from '../../features/home/model/location.model';
+import {ExtendedLocation, Location} from '../../features/home/model/location.model';
 
 import { CarClass } from './car-class.model';
 import { Optional } from './optional.model';
@@ -13,7 +13,7 @@ export enum RideStatus {
 
 export type RideRequest = {
     calculatedTime: number;
-    route: unknown; // TO-DO
+    route: Array<Location>; // TO-DO
     classes: Record<CarClass, number>; // Class - amount
 };
 
@@ -22,6 +22,10 @@ export type ExtendedRideRequest = Omit<RideRequest, 'classes'> & {
     from: ExtendedLocation;
     cost: number;
     carClass: CarClass;
+};
+
+export type ExtendedDriverRideRequest = ExtendedRideRequest & {
+    toPickUp: Array<Location>;
 };
 
 export type Ride = {

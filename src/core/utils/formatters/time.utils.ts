@@ -1,7 +1,7 @@
-import {Optional} from '../../model/optional.model';
+import { Optional } from '../../model/optional.model';
 
 export const toReadableTime = (time?: Optional<string | number>): string => {
-    if(!time) return '';
+    if (!time) return '';
 
     const parsed = typeof time === 'number' ? time : Number.parseInt(time);
 
@@ -11,7 +11,7 @@ export const toReadableTime = (time?: Optional<string | number>): string => {
 };
 
 export const toReadableDate = (time?: Optional<string | number>): string => {
-    if(!time) return '';
+    if (!time) return '';
 
     const parsed = typeof time === 'number' ? time : Number.parseInt(time);
 

@@ -33,6 +33,7 @@ export const HistoryScreen: React.FC = () => {
                 data={[...data].reverse()}
                 onRefresh={getHistory}
                 refreshing={isLoading}
+                showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={renderItem}
             />

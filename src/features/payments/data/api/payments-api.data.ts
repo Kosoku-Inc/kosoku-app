@@ -1,4 +1,4 @@
-import {RestGatewayAPI, restGatewayAPI} from '../../../../core/data/api/rest-gateway-api.data';
+import { RestGatewayAPI, restGatewayAPI } from '../../../../core/data/api/rest-gateway-api.data';
 import { CreatePaymentIntentInput } from '../../model/create-payment-intent-input.model';
 import { CardMethodDetails } from '../../model/method-details.model';
 import { PaymentFinishedInput, PaymentFinishedResponse } from '../../model/payment-finished.model';

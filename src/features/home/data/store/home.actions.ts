@@ -32,6 +32,12 @@ export type FetchPlacesError = {
     error: Error;
 };
 
+export type RestoreDriveStatePayload = {
+    toPickUp: Optional<Array<Location>>;
+    ride: Ride;
+    request: ExtendedRideRequest;
+};
+
 export const INITIALIZE_MAP = {
     TRIGGER: createAction('[Initialize Map] Trigger'),
 };
@@ -101,3 +107,5 @@ export const DECLINE_RIDE = {
 export const SET_RIDE = createAction<Ride>('[Set Ride]');
 
 export const RESET_HOME_STATE = createAction('[Reset Home State]');
+
+export const RESTORE_DRIVE_STATE = createAction<RestoreDriveStatePayload>('[Restore Drive State]');

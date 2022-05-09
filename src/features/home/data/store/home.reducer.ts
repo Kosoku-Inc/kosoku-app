@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import {RideRequest, RideStatus} from '../../../../core/model/ride.model';
+import { RideRequest, RideStatus } from '../../../../core/model/ride.model';
 import { ExtendedLocation } from '../../model/location.model';
 
 import {
@@ -9,7 +9,9 @@ import {
     FETCH_PLACES,
     POINTER_MOVE,
     PREPARE_RIDE,
-    REQUEST_RIDE, RESET_HOME_STATE,
+    REQUEST_RIDE,
+    RESET_HOME_STATE,
+    RESTORE_DRIVE_STATE,
     SET_CHOSEN_LOCATION,
     SET_DRIVER_RIDE_REQUEST,
     SET_RIDE,
@@ -182,17 +184,27 @@ export const homeReducer = createReducer<HomeState>({ ...initialState }, (builde
             state.ride.ride = action.payload;
             state.ride.status = action.payload.status;
 
-            state.ride.route = state.prepareRide.rideRequest.data?.route
+            state.ride.route = state.prepareRide.rideRequest.data?.route;
             state.ride.to = state.prepareRide.to ?? state.prepareDriverRide.rideRequest?.to;
             state.ride.from = state.prepareRide.from ?? state.prepareDriverRide.rideRequest?.from;
 
             // Reset
             state.prepareRide = { ...initialState.prepareRide };
         })
-        .addCase(RESET_HOME_STATE, state => {
+        .addCase(RESET_HOME_STATE, (state) => {
             state.ride = { ...initialState.ride };
             state.prepareRide = { ...initialState.prepareRide };
             state.chooseRoute = { ...initialState.chooseRoute };
             state.prepareDriverRide = { ...initialState.prepareDriverRide };
+        })
+        .addCase(RESTORE_DRIVE_STATE, (state, action) => {
+            state.ride.ride = action.payload.ride;
+            state.ride.status = action.payload.ride.status;
+            state.ride.route = action.payload.request.route;
+            state.ride.toPickUp = action.payload.toPickUp;
+            state.ride.to = action.payload.request.to;
+            state.ride.from = action.payload.request.from;
+            state.chooseRoute.isChoosingRoute = false;
+            state.prepareRide.isPreparing = false;
         });
 });

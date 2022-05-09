@@ -1,9 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 
-import {Optional} from '../../model/optional.model';
-import {Response} from '../../model/response.model';
+import { Optional } from '../../model/optional.model';
+import { Response } from '../../model/response.model';
 import { environmentConfig } from '../../utils/third-party/environment-config.utils';
-
 
 export class RestGatewayAPI {
     private authToken = '';

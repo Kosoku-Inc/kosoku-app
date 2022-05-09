@@ -1,4 +1,4 @@
-import {ExtendedLocation, Location} from '../../features/home/model/location.model';
+import { ExtendedLocation, Location } from '../../features/home/model/location.model';
 
 import { CarClass } from './car-class.model';
 import { Optional } from './optional.model';

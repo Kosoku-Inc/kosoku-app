@@ -38,7 +38,7 @@ export const Pointer = React.forwardRef(function Pointer(props: PointerProps, re
         <PointerWrapper>
             <IconWrapper>
                 <Round />
-                <Animated.View style={legStyle}/>
+                <Animated.View style={legStyle} />
             </IconWrapper>
         </PointerWrapper>
     );

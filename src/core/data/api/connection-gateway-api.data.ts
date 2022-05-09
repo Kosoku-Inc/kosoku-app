@@ -24,6 +24,7 @@ export enum WSMessageType {
     RideTimeout = 'RIDE_TIMEOUT',
     LocationUpdate = 'LOCATION_UPDATE',
     InternalReconnect = 'INTERNAL_RECONNECT',
+    RestoreState = 'RESTORE_STATE',
 }
 
 export type WSMessage = {

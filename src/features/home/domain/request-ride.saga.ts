@@ -3,11 +3,7 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import { RideRequest } from '../../../core/model/ride.model';
 import { homeAPI } from '../data/api/home-api.data';
-import {
-    ANSWER_TO_RIDE_REQUEST,
-    REQUEST_RIDE,
-    SET_DRIVER_RIDE_REQUEST,
-} from '../data/store/home.actions';
+import { ANSWER_TO_RIDE_REQUEST, REQUEST_RIDE, SET_DRIVER_RIDE_REQUEST } from '../data/store/home.actions';
 import { getPrepareRideFromLocation, getPrepareRideToLocation, getRideRequest } from '../data/store/home.selectors';
 import { geolocationService } from '../utils/services/geolocation-service.utils';
 import { mapService } from '../utils/services/map-service.utils';

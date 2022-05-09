@@ -19,7 +19,7 @@ export type OrderTileProps = {
 };
 
 export const OrderTile: React.FC<OrderTileProps> = (props: OrderTileProps) => {
-    console.log(props.order)
+    console.log(props.order);
 
     return (
         <OrderTileWrapper>

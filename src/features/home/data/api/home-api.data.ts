@@ -3,7 +3,7 @@ import {
     connectionGatewayAPI,
     WSMessageType,
 } from '../../../../core/data/api/connection-gateway-api.data';
-import {RestGatewayAPI, restGatewayAPI} from '../../../../core/data/api/rest-gateway-api.data';
+import { RestGatewayAPI, restGatewayAPI } from '../../../../core/data/api/rest-gateway-api.data';
 import { ExtendedRideRequest, RideStatus } from '../../../../core/model/ride.model';
 import { ExtendedLocation, Location } from '../../model/location.model';
 import { DecodeResponse, DirectionsResponse, PlacesResponse } from '../../model/network.model';

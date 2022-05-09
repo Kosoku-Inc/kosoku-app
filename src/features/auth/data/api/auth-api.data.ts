@@ -1,4 +1,4 @@
-import {RestGatewayAPI, restGatewayAPI} from '../../../../core/data/api/rest-gateway-api.data';
+import { RestGatewayAPI, restGatewayAPI } from '../../../../core/data/api/rest-gateway-api.data';
 import { AuthResponse } from '../../model/auth-response.model';
 import { LoginPayload, RegisterPayload } from '../store/auth.actions';
 

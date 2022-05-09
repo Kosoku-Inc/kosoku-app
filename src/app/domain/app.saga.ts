@@ -12,7 +12,7 @@ import { listenForInitializeMap } from '../../features/home/domain/initialize-ma
 import { listenForPrepareRide } from '../../features/home/domain/prepare-ride-data.saga';
 import { listenForAnswerToRideRequest, listenForRequestRideSaga } from '../../features/home/domain/request-ride.saga';
 import { listenForSetChosenLocation } from '../../features/home/domain/set-chosen-location.saga';
-import {listenForSetRideStatus} from '../../features/home/domain/set-ride-status.saga';
+import { listenForSetRideStatus } from '../../features/home/domain/set-ride-status.saga';
 import { listenForSetRouteLocation } from '../../features/home/domain/set-route-location.saga';
 import { listenForAddCard } from '../../features/payments/domain/add-card.saga';
 import { listenForGetPaymentMethods } from '../../features/payments/domain/get-payment-methods.saga';

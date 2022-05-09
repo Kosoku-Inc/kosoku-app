@@ -34,7 +34,7 @@ export function* paySaga(action: ReturnType<typeof PAY.TRIGGER>): SagaIterator {
             const secret = result.data.clientSecret;
 
             if (defaultMethod.type === PaymentMethodType.Card) {
-                const {error, paymentIntent}: ConfirmPaymentResult = yield call(confirmPayment, secret, {
+                const { error, paymentIntent }: ConfirmPaymentResult = yield call(confirmPayment, secret, {
                     type: 'Card',
                     // eslint-disable-next-line
                     paymentMethodId: defaultMethod.details!.stripePaymentId,
@@ -68,7 +68,7 @@ export function* paySaga(action: ReturnType<typeof PAY.TRIGGER>): SagaIterator {
 
     if (_result.status >= 200 && _result.status < 300) {
         yield put(PAY.COMPLETED());
-        yield call(toastService.showSuccess, 'Заказ оплачен', 'Спасибо, что Вы с нами!')
+        yield call(toastService.showSuccess, 'Заказ оплачен', 'Спасибо, что Вы с нами!');
     }
 
     if (_result.error) {

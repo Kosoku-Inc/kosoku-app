@@ -1,25 +1,27 @@
-import {eventChannel, EventChannel, SagaIterator, Subscribe} from 'redux-saga';
-import {call, put, select, takeLatest} from 'redux-saga/effects';
+import { eventChannel, EventChannel, SagaIterator, Subscribe } from 'redux-saga';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 
-import {connectionGatewayAPI, WSMessage, WSMessageType} from '../../../core/data/api/connection-gateway-api.data';
-import {getExistingUser} from '../../../core/data/store/user.selectors';
-import {ExtendedDriverRideRequest, ExtendedRideRequest, Ride, RideStatus} from '../../../core/model/ride.model';
-import {User} from '../../../core/model/user.model';
-import {logger} from '../../../core/utils/logger.utils';
-import {toastService} from '../../../core/utils/services/toast-service.utils';
-import {PAY} from '../../payments/data/store/payments.actions';
+import { connectionGatewayAPI, WSMessage, WSMessageType } from '../../../core/data/api/connection-gateway-api.data';
+import { getExistingUser } from '../../../core/data/store/user.selectors';
+import { ExtendedDriverRideRequest, Ride, RideStatus } from '../../../core/model/ride.model';
+import { User } from '../../../core/model/user.model';
+import { logger } from '../../../core/utils/logger.utils';
+import { toastService } from '../../../core/utils/services/toast-service.utils';
+import { PAY } from '../../payments/data/store/payments.actions';
 import {
     REQUEST_RIDE,
     RESET_HOME_STATE,
+    RESTORE_DRIVE_STATE,
+    RestoreDriveStatePayload,
     SET_DRIVER_RIDE_REQUEST,
     SET_RIDE,
     SET_RIDE_STATUS,
 } from '../data/store/home.actions';
-import {getRide} from '../data/store/home.selectors';
-import {geolocationService} from '../utils/services/geolocation-service.utils';
-import {mapService} from '../utils/services/map-service.utils';
+import { getRide } from '../data/store/home.selectors';
+import { geolocationService } from '../utils/services/geolocation-service.utils';
+import { mapService } from '../utils/services/map-service.utils';
 
-import {receiveLocationUpdateSaga} from './receive-gps-position.saga';
+import { receiveLocationUpdateSaga } from './receive-gps-position.saga';
 
 export const webSocketSubscribe: Subscribe<WSMessage> = (emitter) => connectionGatewayAPI.addEventListener(emitter);
 
@@ -58,7 +60,7 @@ export function* receiveWebSocketMessageSaga(message: WSMessage): SagaIterator {
 
             yield put(SET_RIDE_STATUS.COMPLETED(rideStatus));
 
-            if(rideStatus === RideStatus.Completed) {
+            if (rideStatus === RideStatus.Completed) {
                 const ride: Ride = yield select(getRide);
                 yield put(RESET_HOME_STATE());
                 yield put(PAY.TRIGGER({ amount: ride.cost, rideId: ride.id }));
@@ -84,6 +86,12 @@ export function* receiveWebSocketMessageSaga(message: WSMessage): SagaIterator {
             } else {
                 // TODO
             }
+
+            break;
+        }
+        case WSMessageType.RestoreState: {
+            const data = message.payload as RestoreDriveStatePayload;
+            yield put(RESTORE_DRIVE_STATE(data));
 
             break;
         }

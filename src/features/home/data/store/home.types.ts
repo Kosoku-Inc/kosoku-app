@@ -1,12 +1,7 @@
 import { Optional } from '../../../../core/model/optional.model';
-import {
-    ExtendedDriverRideRequest,
-    Ride,
-    RideRequest,
-    RideStatus,
-} from '../../../../core/model/ride.model';
+import { ExtendedDriverRideRequest, Ride, RideRequest, RideStatus } from '../../../../core/model/ride.model';
 import { State } from '../../../../core/model/state.model';
-import {ExtendedLocation, Location} from '../../model/location.model';
+import { ExtendedLocation, Location } from '../../model/location.model';
 
 export type RideState = {
     status: RideStatus;

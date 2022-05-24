@@ -23,10 +23,9 @@ import {
     getDriverRideRequest,
     getRideStateRoute,
     getRideStateToPickUp,
-    getRide,
     getRideStateToPoint,
     getRideStateFromPoint,
-    getHomeState,
+    getDriverLocation,
 } from '../data/store/home.selectors';
 import { useMapSetup } from '../utils/hooks/use-map-setup.utils';
 import { bottomSheetService } from '../utils/services/bottom-sheet-service.utils';
@@ -66,7 +65,7 @@ export const HomeScreen = ({ navigation }: { navigation: DrawerNavigationProp<ne
     const rideStateRoute = useSelector(getRideStateRoute);
     const rideStateToPickUp = useSelector(getRideStateToPickUp);
 
-    console.log(rideStateToPickUp);
+    const driverPosition = useSelector(getDriverLocation);
 
     const to = useMemo(() => {
         if (rideTo) return rideTo;
@@ -138,6 +137,13 @@ export const HomeScreen = ({ navigation }: { navigation: DrawerNavigationProp<ne
                         {!!route && <Polyline coordinates={route} strokeWidth={2} strokeColor={'red'} />}
                         {!!toPickUp && <Polyline coordinates={toPickUp} strokeWidth={2} />}
                     </>
+                )}
+                {!!driverPosition && (
+                    <Marker
+                        coordinate={driverPosition}
+                        style={{ maxHeight: 50, maxWidth: 50 }}
+                        icon={require('../../../../assets/icons/car-top-view.png')}
+                    />
                 )}
             </MapView>
             {/* eslint-disable-next-line react-native/no-color-literals */}

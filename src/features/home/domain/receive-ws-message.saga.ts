@@ -13,11 +13,13 @@ import {
     RESET_HOME_STATE,
     RESTORE_DRIVE_STATE,
     RestoreDriveStatePayload,
+    SET_DRIVER_LOCATION,
     SET_DRIVER_RIDE_REQUEST,
     SET_RIDE,
     SET_RIDE_STATUS,
 } from '../data/store/home.actions';
 import { getRide } from '../data/store/home.selectors';
+import { Location } from '../model/location.model';
 import { geolocationService } from '../utils/services/geolocation-service.utils';
 import { mapService } from '../utils/services/map-service.utils';
 
@@ -41,6 +43,12 @@ export function* receiveWebSocketMessageSaga(message: WSMessage): SagaIterator {
             break;
         }
         case WSMessageType.LocationUpdate: {
+            const data = message.payload as { location: Location };
+
+            if (!user.driver) {
+                yield put(SET_DRIVER_LOCATION(data.location));
+            }
+
             break;
         }
         case WSMessageType.RideRequest: {
@@ -50,7 +58,7 @@ export function* receiveWebSocketMessageSaga(message: WSMessage): SagaIterator {
                 break;
             }
 
-            yield put(SET_DRIVER_RIDE_REQUEST(data.data));
+            yield put(SET_DRIVER_RIDE_REQUEST({ data: data.data }));
             yield call(mapService.animateToRegion, data.data.to, data.data.from);
 
             break;
@@ -69,7 +77,7 @@ export function* receiveWebSocketMessageSaga(message: WSMessage): SagaIterator {
             break;
         }
         case WSMessageType.RideAccept: {
-            const data = message.payload as Ride;
+            const data = message.payload as { ride: Ride; driverLocation: Location };
 
             yield put(REQUEST_RIDE.COMPLETED(false));
             yield put(SET_RIDE_STATUS.COMPLETED(RideStatus.Starting));
@@ -91,6 +99,11 @@ export function* receiveWebSocketMessageSaga(message: WSMessage): SagaIterator {
         }
         case WSMessageType.RestoreState: {
             const data = message.payload as RestoreDriveStatePayload;
+
+            if (data.driverLocation) {
+                yield call(mapService.animateCamera, data.driverLocation);
+            }
+
             yield put(RESTORE_DRIVE_STATE(data));
 
             break;

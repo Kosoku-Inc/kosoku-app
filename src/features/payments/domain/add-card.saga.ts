@@ -22,7 +22,7 @@ export function* addCardSaga(action: ReturnType<typeof ADD_CARD.TRIGGER>): SagaI
     yield put(ADD_CARD.STARTED());
 
     const result: CreatePaymentIntentResponse = yield call(paymentsAPI.createPaymentIntent, {
-        bynAmount: 300, // rubles * 100
+        bynAmount: 3,
         requestThreeDSecure: 'automatic',
     });
 

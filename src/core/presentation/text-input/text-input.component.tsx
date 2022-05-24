@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import { KeyboardType, Pressable, TextInput as RNTextInput } from 'react-native';
+import {KeyboardType, Platform, Pressable, TextInput as RNTextInput} from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { FontType, getFontName } from '../../utils/theme/fonts.utils';
@@ -39,6 +39,7 @@ export const TextInput: React.FC<TextInputProps> = (props: TextInputProps) => {
         borderWidth: 2,
         borderRadius: 25,
         opacity: opacity.value,
+        height: Platform.OS === 'android' ? 60 : undefined
     }));
 
     return (
@@ -48,8 +49,10 @@ export const TextInput: React.FC<TextInputProps> = (props: TextInputProps) => {
                     ref={textInputRef}
                     style={{
                         color: defaultTheme.colors.text,
-                        margin: defaultTheme.spacer * 2,
+                        marginHorizontal: defaultTheme.spacer * 2,
+                        marginVertical: Platform.OS === 'ios' ? defaultTheme.spacer * 2 : 0,
                         fontFamily: getFontName(FontType.semibold),
+                        height: Platform.OS === 'android' ? 54 : undefined
                     }}
                     placeholderTextColor={defaultTheme.colors.text}
                     placeholder={props.placeholder}
@@ -65,34 +68,3 @@ export const TextInput: React.FC<TextInputProps> = (props: TextInputProps) => {
         </Animated.View>
     );
 };
-
-/*
-<PaperTextInput
-            editable={!props.disabled}
-            mode={'outlined'}
-            placeholder={props.placeholder}
-            onChangeText={props.onChangeText}
-            onFocus={props.onFocus}
-            style={{
-                marginBottom: defaultTheme.spacer,
-                marginHorizontal: defaultTheme.spacer * 2,
-                fontFamily: getFontName(FontType.regular),
-            }}
-            returnKeyType={'done'}
-            secureTextEntry={props.secureTextEntry}
-            keyboardType={props.keyboardType}
-            activeOutlineColor={colors.black}
-            outlineColor={colors.darkerGrey}
-            theme={{
-                roundness: 16,
-                colors: {
-                    background: colors.white,
-                },
-                fonts: {
-                    regular: {
-                        fontFamily: getFontName(FontType.regular),
-                    },
-                },
-            }}
-        />
- */

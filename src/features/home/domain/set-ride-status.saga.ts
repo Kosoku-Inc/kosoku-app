@@ -16,6 +16,11 @@ export function* setRideStatusSaga(action: ReturnType<typeof SET_RIDE_STATUS.TRI
         yield call(toastService.showSuccess, 'Поездка завершена', `Ваша прибыль - ${ride.cost}р`);
         yield put(RESET_HOME_STATE());
     }
+
+    /*yield call(homeAPI.updateMyLocation, {
+        latitude: 53.8874276,
+        longitude: 27.5425487,
+    });*/
 }
 
 export function* listenForSetRideStatus(): SagaIterator {

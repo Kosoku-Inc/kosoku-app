@@ -194,3 +194,8 @@ export const getRideStateFromPoint: Selector<ApplicationState, Optional<Location
     getHomeState,
     (state) => state.ride.from
 );
+
+export const getDriverLocation: Selector<ApplicationState, Optional<Location>> = createSelector(
+    getHomeState,
+    (state) => state.ride.driverPosition
+);

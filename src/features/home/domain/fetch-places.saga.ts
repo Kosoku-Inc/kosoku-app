@@ -10,7 +10,7 @@ import { PlacesResponse } from '../model/network.model';
 export function* fetchPlacesSaga(action: ReturnType<typeof FETCH_PLACES.TRIGGER>): SagaIterator {
     yield put(FETCH_PLACES.STARTED(action.payload));
 
-    if (!action.payload.toSearch.trim()) {
+    if (action.payload.toSearch.trim().length < 3) {
         yield put(FETCH_PLACES.COMPLETED({ results: [], direction: action.payload.direction }));
         return;
     }

@@ -6,6 +6,7 @@ import Geolocation, {
 
 import { logger } from '../../../../core/utils/logger.utils';
 import { Location } from '../../model/location.model';
+import {Platform} from 'react-native';
 
 export class GeolocationService {
     latestLocation: Location | null = null;
@@ -20,7 +21,9 @@ export class GeolocationService {
             skipPermissionRequests: false,
         });
 
-        Geolocation.requestAuthorization();
+        if(Platform.OS === 'ios') {
+            Geolocation.requestAuthorization();
+        }
     };
 
     getLocation = async (): Promise<Location> => {

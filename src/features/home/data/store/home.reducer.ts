@@ -13,6 +13,7 @@ import {
     RESET_HOME_STATE,
     RESTORE_DRIVE_STATE,
     SET_CHOSEN_LOCATION,
+    SET_DRIVER_LOCATION,
     SET_DRIVER_RIDE_REQUEST,
     SET_RIDE,
     SET_RIDE_REQUEST,
@@ -20,6 +21,7 @@ import {
     SET_ROUTE_LOCATION,
 } from './home.actions';
 import { HomeState } from './home.types';
+import { WSMessageType } from '../../../../core/data/api/connection-gateway-api.data';
 
 const initialState: HomeState = {
     pointerLocation: {
@@ -162,7 +164,7 @@ export const homeReducer = createReducer<HomeState>({ ...initialState }, (builde
             state.prepareRide.isCarSearching = false;
         })
         .addCase(SET_DRIVER_RIDE_REQUEST, (state, action) => {
-            if (!action.payload) {
+            if (!action.payload || (!action.payload.data && action.payload.result === WSMessageType.RideAccept)) {
                 state.ride.toPickUp = state.prepareDriverRide.rideRequest?.toPickUp;
 
                 state.ride.route = state.prepareDriverRide.rideRequest?.route;
@@ -178,11 +180,12 @@ export const homeReducer = createReducer<HomeState>({ ...initialState }, (builde
                 } as RideRequest;
             }
 
-            state.prepareDriverRide.rideRequest = action.payload;
+            state.prepareDriverRide.rideRequest = action.payload?.data;
         })
         .addCase(SET_RIDE, (state, action) => {
-            state.ride.ride = action.payload;
-            state.ride.status = action.payload.status;
+            state.ride.ride = action.payload.ride;
+            state.ride.status = action.payload.ride.status;
+            state.ride.driverPosition = action.payload.driverLocation;
 
             state.ride.route = state.prepareRide.rideRequest.data?.route;
             state.ride.to = state.prepareRide.to ?? state.prepareDriverRide.rideRequest?.to;
@@ -190,6 +193,9 @@ export const homeReducer = createReducer<HomeState>({ ...initialState }, (builde
 
             // Reset
             state.prepareRide = { ...initialState.prepareRide };
+        })
+        .addCase(SET_DRIVER_LOCATION, (state, action) => {
+            state.ride.driverPosition = action.payload;
         })
         .addCase(RESET_HOME_STATE, (state) => {
             state.ride = { ...initialState.ride };
@@ -206,5 +212,6 @@ export const homeReducer = createReducer<HomeState>({ ...initialState }, (builde
             state.ride.from = action.payload.request.from;
             state.chooseRoute.isChoosingRoute = false;
             state.prepareRide.isPreparing = false;
+            state.ride.driverPosition = action.payload.driverLocation;
         });
 });

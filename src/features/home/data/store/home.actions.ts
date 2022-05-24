@@ -36,6 +36,7 @@ export type RestoreDriveStatePayload = {
     toPickUp: Optional<Array<Location>>;
     ride: Ride;
     request: ExtendedRideRequest;
+    driverLocation?: Location;
 };
 
 export const INITIALIZE_MAP = {
@@ -61,7 +62,8 @@ export const REQUEST_RIDE = {
 
 export const SET_RIDE_REQUEST = createAction<Optional<RideRequest>>('[Set Ride Request]');
 
-export const SET_DRIVER_RIDE_REQUEST = createAction<Optional<ExtendedDriverRideRequest>>('[Set Driver Ride Request]');
+export const SET_DRIVER_RIDE_REQUEST =
+    createAction<Optional<{ data?: ExtendedDriverRideRequest; result?: WSMessageType }>>('[Set Driver Ride Request]');
 
 export const ANSWER_TO_RIDE_REQUEST = createAction<WSMessageType>('[Answer To Ride Request]');
 
@@ -104,8 +106,10 @@ export const DECLINE_RIDE = {
     COMPLETED: createAction('[Decline Ride] Completed'),
 };
 
-export const SET_RIDE = createAction<Ride>('[Set Ride]');
+export const SET_RIDE = createAction<{ ride: Ride; driverLocation: Location }>('[Set Ride]');
 
 export const RESET_HOME_STATE = createAction('[Reset Home State]');
 
 export const RESTORE_DRIVE_STATE = createAction<RestoreDriveStatePayload>('[Restore Drive State]');
+
+export const SET_DRIVER_LOCATION = createAction<Location>('[Set Driver Location]');

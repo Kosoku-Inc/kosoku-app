@@ -1,6 +1,6 @@
 import { CardField, CardFieldInput } from '@stripe/stripe-react-native';
 import React, { useCallback, useRef } from 'react';
-import { Dimensions, Keyboard, KeyboardAvoidingView } from 'react-native';
+import {Dimensions, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getExistingUser } from '../../../../core/data/store/user.selectors';
@@ -59,13 +59,13 @@ export const AddCard: React.FC = () => {
                 <CardField
                     style={{
                         width: Dimensions.get('window').width - defaultTheme.spacer * 4,
-                        height: 100,
+                        height: Platform.OS === 'ios' ? 100 : 45,
                         marginLeft: defaultTheme.spacer * 2,
                     }}
                     postalCodeEnabled={false}
                     cardStyle={{
                         fontFamily: getFontName(FontType.semibold),
-                        textColor: colors.black,
+                        textColor: Platform.OS === 'ios' ? colors.black : undefined,
                     }}
                     onCardChange={(data) => (cardData.current = data)}
                 />

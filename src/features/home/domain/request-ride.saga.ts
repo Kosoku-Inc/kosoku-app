@@ -1,6 +1,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
+import { WSMessageType } from '../../../core/data/api/connection-gateway-api.data';
 import { RideRequest } from '../../../core/model/ride.model';
 import { homeAPI } from '../data/api/home-api.data';
 import { ANSWER_TO_RIDE_REQUEST, REQUEST_RIDE, SET_DRIVER_RIDE_REQUEST } from '../data/store/home.actions';
@@ -20,6 +21,7 @@ export function* requestRideSaga(action: ReturnType<typeof REQUEST_RIDE.TRIGGER>
         calculatedTime: request.calculatedTime,
         route: request.route,
     });
+
     yield put(REQUEST_RIDE.COMPLETED(true));
 }
 
@@ -28,7 +30,7 @@ export function* listenForRequestRideSaga(): SagaIterator {
 }
 
 export function* answerToRideRequestSaga(action: ReturnType<typeof ANSWER_TO_RIDE_REQUEST>): SagaIterator {
-    yield put(SET_DRIVER_RIDE_REQUEST());
+    yield put(SET_DRIVER_RIDE_REQUEST({ result: action.payload }));
 
     if (geolocationService.latestLocation) {
         yield call(mapService.animateCamera, geolocationService.latestLocation, 15);

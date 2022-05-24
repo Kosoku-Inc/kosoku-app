@@ -6,4 +6,4 @@ export enum FontType {
     bold = 'Bold',
 }
 
-export const getFontName = (type: FontType) => (Platform.OS === 'android' ? 'SFProDisplay' : `SFProDisplay-${type}`);
+export const getFontName = (type: FontType) => `SFProDisplay-${type}`;
